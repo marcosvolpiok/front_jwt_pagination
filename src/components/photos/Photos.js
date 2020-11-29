@@ -26,23 +26,23 @@ class Photos extends React.Component {
              {this.state.photos.length > 0 &&
                 <div>
                     <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Photo</th>
-                        <th scope="col">Title</th>
-                        </tr>
-                    </thead>
+                        <thead>
+                            <tr>
+                            <th scope="col">Photo</th>
+                            <th scope="col">Title</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        {this.state.photos.map((photo, index) => {
-                                if (index <10 ) {
-                                    return <tr key={photo.id}>
-                                        <td><img alt={photo.title} src={photo.thumbnailUrl} /></td>
-                                        <td>{photo.title}</td>
-                                    </tr>
-                                }
-                        })}
-                    </tbody>
+                        <tbody>
+                            {this.state.photos.map((photo, index) => {
+                                    if (index <10 ) {
+                                        return <tr key={photo.id}>
+                                            <td><img alt={photo.title} src={photo.thumbnailUrl} /></td>
+                                            <td>{photo.title}</td>
+                                        </tr>
+                                    }
+                            })}
+                        </tbody>
 
                     </table>
                 </div>
