@@ -40,23 +40,13 @@ class Photos extends React.Component {
                                         <td><img alt={photo.title} src={photo.thumbnailUrl} /></td>
                                         <td>{photo.title}</td>
                                     </tr>
-
                                 }
                         })}
                     </tbody>
 
                     </table>
                 </div>
-            }
-
-
-                         {/*
-                         
-                                                     <tr key={photo.id}>
-                                <td><Link to={photo.url}><img alt={photo.title} src={photo.thumbnailUrl} /></Link></td>
-                                <td>{photo.title}</td>
-                            </tr>
-                            */}       
+            }  
 
             {this.state.photos.length === 0 &&
                 <h2>No such any photo.</h2>
