@@ -1,112 +1,90 @@
-import React from 'react'
+import React from 'react';
+import {Link} from 'react-router-dom';
+import { instanceOf } from "prop-types";
+import { withCookies, Cookies } from "react-cookie";
 
 class Login extends React.Component {
-    state = {
-        messages: [],
-        servers: []
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
     };
 
+    state = {
+        loginMessage: '',
+        loginStatus: false,
+        token: this.props.cookies.get("token") || ""
+    };
 
     constructor(props) {
         super(props);
 
-        this.handleSelectChangeServer = this.handleSelectChangeServer.bind(this);
-        this.handleInputChangeMessage = this.handleInputChangeMessage.bind(this);
-        
-
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    async handleSelectChangeServer(event) {
+    handleCookie = (token) => {
+        const { cookies } = this.props;
+        cookies.set("token", token, { path: "/" });
+    };
+   
+    handleInputChange(event) {
         const target = event.target;
         const value = target.value;
-        console.log('value', value);
-
-        const messagesResponse = await fetch(`http://localhost:4000/messagesByServer/${value}`);
-        const messagsJson = await messagesResponse.json();
-        this.setState({ messages: messagsJson }); 
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
     }
 
-    async handleInputChangeMessage(event) {
-        const target = event.target;
-        const value = target.value;
-
-        const messagesResponse = await fetch(`http://localhost:4000/messageByMessage`, {
+    async handleClick () {
+        const responseLogin = await fetch(`http://localhost:4000/login/`, {
             method: 'POST',
             mode: 'cors',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: value
+                user: this.state.user,
+                pwd: this.state.pwd
             }) 
         });
-        const messagsJson = await messagesResponse.json();
-        this.setState({ messages: messagsJson }); 
-      }
+        const loginJson = await responseLogin.json();
+ 
+        this.setState({
+            loginMessage: loginJson.message
+        });
 
-    async handleSubmit(event) {
-        console.log('on submit');
+        if(responseLogin.status===200){
+            this.setState({
+                loginStatus: true
+            });
+
+            this.handleCookie(loginJson.token);
+        }
     }
 
-
-    async componentDidMount() {
-        const messagesResponse = await fetch(`http://localhost:4000/messages/`);
-        const messagsJson = await messagesResponse.json();
-        this.setState({ messages: messagsJson }); 
-
-        const serversResponse = await fetch(`http://localhost:4000/servers/`);
-        const serversJson = await serversResponse.json();
-        this.setState({ servers: serversJson }); 
-    }
+   
     
     render() {
-        return (
-        <div>
-            {this.state.servers.length > 0 &&
-                <div>
-                    <select onChange={this.handleSelectChangeServer}>
-                        {this.state.servers.map((server) => (
-                            <option key={server.id} value={server.id}>{server.server}</option>
-                        ))}
-                    </select>
-                </div>
-            }  
-
-            <form onSubmit={this.handleSubmit}>
-                <input type="text" placeholder="Search a menssage" onChange={this.handleInputChangeMessage}></input>
-            </form>
-
-
-            {this.state.messages.length > 0 &&
-                <div>
-                    <table className="table">
-                    <thead>
-                        <tr>
-                        <th scope="col">Server</th>
-                        <th scope="col">Message</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {this.state.messages.map((message) => (
-                            <tr key={message.id}>
-                                <td>{message.server.server}</td>
-                                <td>{message.message}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-
-                    </table>
-                </div>
-            }
-
-            {this.state.messages.length === 0 &&
-                <h2>No such any message.</h2>
-            }
-        </div>
-        )
+        const { token } = this.state;
         
+
+        return (
+            <div>
+                {this.state.loginMessage !== '' &&
+                    <p>{this.state.loginMessage}</p>
+                }
+
+                {this.state.loginStatus === true &&
+                    <p><Link to="/photos/">Photos list</Link></p>
+                }
+
+                <input type="text" name="user" onChange={this.handleInputChange} />
+                <div></div>
+                <input type="password" name="pwd" onChange={this.handleInputChange} />
+
+                <button type="button" className="btn btn-primary" onClick={() => this.handleClick()}>Login</button>
+            </div>
+        )
       }
 
   }
-  export default Messages;
+  export default withCookies(Login);

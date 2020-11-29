@@ -1,8 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { instanceOf } from "prop-types";
+import { withCookies, Cookies } from "react-cookie";
 
 class Photos extends React.Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    };
+
     state = {
-        photos: []
+        photos: [],
+        token: this.props.cookies.get("token") || ""
     };
 
     async componentDidMount() {
@@ -10,19 +17,23 @@ class Photos extends React.Component {
         {
             method: 'GET',
             headers: {
-              'access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjaGVjayI6dHJ1ZSwidXNlciI6InRlc3QiLCJpYXQiOjE2MDY2NzcxNjQsImV4cCI6MTYwNjY3ODYwNH0.lxxA51gFId9mISRMySJHObpZWB8tQv-HuUy-nhnnqpE'
+              'access-token': this.state.token
             }
         });
         const photosJson = await photosResponse.json();
-        this.setState({ photos: photosJson }); 
-
-        console.log('photos', photosJson);
+        if(photosResponse.status===200){
+            this.setState({ photos: photosJson });
+        }else{
+            this.props.history.push('/');
+        }
     }
     
     render() {
+        const { token } = this.state;
+
         return (
         <div>
-            <h1>Photos {this.state.photos.length}</h1>
+            <h1>Photos</h1>
              {this.state.photos.length > 0 &&
                 <div>
                     <table className="table">
@@ -35,12 +46,12 @@ class Photos extends React.Component {
 
                         <tbody>
                             {this.state.photos.map((photo, index) => {
-                                    if (index <10 ) {
-                                        return <tr key={photo.id}>
-                                            <td><img alt={photo.title} src={photo.thumbnailUrl} /></td>
-                                            <td>{photo.title}</td>
-                                        </tr>
-                                    }
+                                if (index <10 ) {
+                                    return <tr key={photo.id}>
+                                        <td><img alt={photo.title} src={photo.thumbnailUrl} /></td>
+                                        <td>{photo.title}</td>
+                                    </tr>
+                                }
                             })}
                         </tbody>
 
@@ -57,4 +68,4 @@ class Photos extends React.Component {
       }
 
   }
-  export default Photos;
+  export default withCookies(Photos);
