@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
+import 'bootstrap/dist/css/bootstrap.css';
 
 class Login extends React.Component {
     static propTypes = {
@@ -63,24 +64,31 @@ class Login extends React.Component {
 
    
     
-    render() {
-        const { token } = this.state;
-        
-
+    render() {    
         return (
             <div>
+                <h2>User: demo</h2>
+                <h2>Password: demo</h2>
                 {this.state.loginMessage !== '' &&
+                <div class="alert alert-secondary" role="alert">
                     <p>{this.state.loginMessage}</p>
+                </div>
+                    
                 }
 
                 {this.state.loginStatus === true &&
-                    <p><Link to="/photos/">Photos list</Link></p>
+                    <h3><Link to="/photos/">Photos list</Link></h3>
                 }
 
-                <input type="text" name="user" onChange={this.handleInputChange} />
-                <div></div>
-                <input type="password" name="pwd" onChange={this.handleInputChange} />
+                <div class="form-group">
+                    <div class="form-group">
+                        <input type="text" name="user" onChange={this.handleInputChange} placeholder="User" />
+                    </div>
 
+                    <div class="form-group">
+                        <input type="password" name="pwd" onChange={this.handleInputChange} placeholder="Password" />
+                    </div>
+                </div>
                 <button type="button" className="btn btn-primary" onClick={() => this.handleClick()}>Login</button>
             </div>
         )

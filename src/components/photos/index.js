@@ -43,13 +43,6 @@ class PhotosContainer extends React.Component {
     render() {
         return (
             <div>
-                {this.state.currentPage &&
-                    <Paginator
-                    onPageChanged={this.onPageChanged}
-                    currentPage={this.state.currentPage}
-                    totalPages={this.state.totalPages}></Paginator>
-                }
-
                 {this.state.photos.length > 0 && this.state.currentPage &&
                     <Photos
                     photos={this.state.photos}
@@ -57,7 +50,12 @@ class PhotosContainer extends React.Component {
                     totalPages={this.state.totalPages}></Photos>
                 }
 
-
+                {this.state.currentPage &&
+                    <Paginator
+                    onPageChanged={this.onPageChanged}
+                    currentPage={this.state.currentPage}
+                    totalPages={this.state.totalPages}></Paginator>
+                }
             </div>
         )
       }

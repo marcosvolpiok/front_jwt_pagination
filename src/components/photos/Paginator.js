@@ -35,7 +35,7 @@ class Test extends React.Component {
         return (
           <div>
               {this.props.currentPage > 1 &&
-                <button type="button" className="btn btn-primary" onClick={() => this.handleClickPrev()}>Previous</button>
+                <button type="button" className="btn btn-primary mr-5" onClick={() => this.handleClickPrev()}>Previous</button>
               }
 
               {this.props.currentPage <= this.props.totalPages &&
