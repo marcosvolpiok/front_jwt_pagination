@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import { instanceOf } from "prop-types";
-import { withCookies, Cookies } from "react-cookie";
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 class Login extends React.Component {
     static propTypes = {
