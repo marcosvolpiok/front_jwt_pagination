@@ -2,7 +2,9 @@ import React from 'react';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import Photos from './Photos';
-import Paginator from './Paginator'
+import Paginator from '../Paginator/';
+const env = process.env.NODE_ENV || 'development';
+const config = require('../../config/config.json')[env];
 
 class PhotosContainer extends React.Component {
     static propTypes = {
@@ -24,7 +26,7 @@ class PhotosContainer extends React.Component {
     }
 
     async componentDidMount() {
-        const photosResponse = await fetch(`http://localhost:4000/photos/`,
+        const photosResponse = await fetch(`${config.api}/photos/`,
         {
             method: 'GET',
             headers: {

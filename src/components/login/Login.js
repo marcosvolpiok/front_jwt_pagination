@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import 'bootstrap/dist/css/bootstrap.css';
+const env = process.env.NODE_ENV || 'development';
+const config = require('../../config/config.json')[env];
 
 class Login extends React.Component {
     static propTypes = {
@@ -36,7 +38,7 @@ class Login extends React.Component {
     }
 
     async handleClick () {
-        const responseLogin = await fetch(`http://localhost:4000/login/`, {
+        const responseLogin = await fetch(`${config.api}/login/`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -70,7 +72,7 @@ class Login extends React.Component {
                 <h2>User: demo</h2>
                 <h2>Password: demo</h2>
                 {this.state.loginMessage !== '' &&
-                <div class="alert alert-secondary" role="alert">
+                <div className="alert alert-secondary" role="alert">
                     <p>{this.state.loginMessage}</p>
                 </div>
                     
@@ -80,12 +82,12 @@ class Login extends React.Component {
                     <h3><Link to="/photos/">Photos list</Link></h3>
                 }
 
-                <div class="form-group">
-                    <div class="form-group">
+                <div className="form-group">
+                    <div className="form-group">
                         <input type="text" name="user" onChange={this.handleInputChange} placeholder="User" />
                     </div>
 
-                    <div class="form-group">
+                    <div className="form-group">
                         <input type="password" name="pwd" onChange={this.handleInputChange} placeholder="Password" />
                     </div>
                 </div>
